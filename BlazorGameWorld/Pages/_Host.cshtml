@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="favicon.png"/>
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
-<body>
+<body id="blazorBody">
     <component type="typeof(App)" render-mode="ServerPrerendered" />
 
     <div id="blazor-error-ui">
@@ -29,6 +29,23 @@
         <a class="dismiss">🗙</a>
     </div>
 
-    <script src="_framework/blazor.server.js"></script>
+	<script src="_framework/blazor.server.js"></script>
+    <script>
+        window.applyStyleForElement = function (styleOp, styleOp2) {
+            document.getElementById(styleOp.id).style[styleOp.attrib] = styleOp.value;
+            if (styleOp2 != null) {
+                document.getElementById(styleOp2.id).style[styleOp2.attrib] = styleOp2.value;
+            }
+        }
+
+        window.getStyleForElement = function (styleOp) {
+            return document.getElementById(styleOp.id).style[styleOp.attrib] == "inline" ? true : false;
+        }
+
+        var FocusScript = FocusScript || {};
+        FocusScript.setFocus = function (element) {
+            element.focus();
+        };
+    </script>
 </body>
 </html>
