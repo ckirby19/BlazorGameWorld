@@ -57,12 +57,6 @@
         </div>    
     </div>
  }
-@* <ul id="messagesList">
-    @foreach (var message in messages)
-    {
-        <li>@message</li>
-    }
-</ul> *@
 
 @code {
     private int globalScore=0;
@@ -92,7 +86,7 @@
               {
                   _otherMoney = otherMoney;
                   _otherUser = otherUser;
-                  StateHasChanged();
+                  this.InvokeAsync(() => this.StateHasChanged());;
               }
           });
 
@@ -109,7 +103,7 @@
              {
                 _otherMoney=otherMoney;
                 _otherUser=otherUserName;
-                StateHasChanged();
+                this.InvokeAsync(() => this.StateHasChanged());;
             }
         });   
              
@@ -125,7 +119,7 @@
                  _otherMoney = _money;
                  _otherUser = _userName;
              }
-             StateHasChanged();
+	         this.InvokeAsync(() => this.StateHasChanged());
          });
 
         hubConnection.On<string, string>("RemoveUser", (_userName, _connectionId) =>
@@ -136,7 +130,7 @@
                     _otherMoney = 0;
                     @* word = ""; *@
                     word = null;
-                    StateHasChanged();
+	                this.InvokeAsync(() => this.StateHasChanged());
                 }
             });
 
@@ -153,7 +147,7 @@
                   isLogin = true;
               }
               word = _wordText;
-              StateHasChanged();
+	          this.InvokeAsync(() => this.StateHasChanged());
           });
 
         hubConnection.On<string>("RefreshWord", async (_wordText) =>
@@ -176,13 +170,13 @@
 
             word = _wordText;
             answer = "";
-            StateHasChanged();
+            this.InvokeAsync(() => this.StateHasChanged());;
         });
 
         hubConnection.On<int, string, string, int>("ReceiveOpen", async (counter, imgId, lblId, _money) =>
            {
                _otherMoney = _money;
-               StateHasChanged();
+	           this.InvokeAsync(() => this.StateHasChanged());
                await Open(counter, imgId, lblId, true);
            });
 
@@ -192,7 +186,7 @@
                 await JSRuntime.InvokeVoidAsync("applyStyleForElement",
                                                     new { id = "blazorBody", attrib = "background-image", value = "url('../Images/wall31.jpeg')" });
                   
-                StateHasChanged();              
+                this.InvokeAsync(() => this.StateHasChanged());;              
            });
            
 

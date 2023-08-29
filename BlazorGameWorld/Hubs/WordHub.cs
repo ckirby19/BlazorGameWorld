@@ -23,7 +23,6 @@ namespace BlazorSignalRApp.Server.Hubs
             Console.WriteLine("Client Connected:" + this.Context.ConnectionId);
             int otherMoney = 100;
             string otherName = null;
-            /* if (clientList.Count > 0) */
             Console.WriteLine("Clients Count:" + clientList.Count);
 
             if (clientList.Count == 1)
