@@ -59,7 +59,7 @@ jobs:
           run: dotnet test
 
         - name: Publish .NET Core Project
-          run: dotnet publish BlazorGameWorld.csproj -c Release -o release --nologo
+          run: dotnet publish ./BlazorGameWorld/BlazorGameWorld.csproj -c Release -o release --nologo
 
         - name: Deploy 🚀
           uses: JamesIves/github-pages-deploy-action@3.7.1
