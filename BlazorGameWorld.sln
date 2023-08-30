@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGameWorld", "BlazorGameWorld\BlazorGameWorld.csproj", "{66ED5900-F8A8-4142-AC03-5FEDD53FBC7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorGameWorldTests", "BlazorGameWorldTests\BlazorGameWorldTests.csproj", "{AF11DDA1-00D9-45EE-8997-3197F7977C81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{66ED5900-F8A8-4142-AC03-5FEDD53FBC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66ED5900-F8A8-4142-AC03-5FEDD53FBC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66ED5900-F8A8-4142-AC03-5FEDD53FBC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF11DDA1-00D9-45EE-8997-3197F7977C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF11DDA1-00D9-45EE-8997-3197F7977C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF11DDA1-00D9-45EE-8997-3197F7977C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF11DDA1-00D9-45EE-8997-3197F7977C81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
