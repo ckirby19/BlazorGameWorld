@@ -1,4 +1,5 @@
 using BlazorGameWorld.Data;
+using BlazorGameWorld.Pages;
 using BlazorSignalRApp.Server.Hubs;
 using blazorWords.Data;
 using Microsoft.AspNetCore.Components;
@@ -18,6 +19,7 @@ builder.Services.AddResponseCompression(opts =>
 });
 builder.Services.AddTransient<IWordService, WordService>();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddSingleton<BlazorGameWorld.Shared.ConnectFourGameState>();
 
 var app = builder.Build();
 
