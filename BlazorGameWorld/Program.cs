@@ -1,42 +1,27 @@
+using BlazorGameWorld;
 using BlazorGameWorld.Data;
 using BlazorSignalRApp.Server.Hubs;
 using blazorWords.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // Add services to the container.
-builder.Services.AddSignalR();
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddResponseCompression(opts =>
-{
-	opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-		new[] { "application/octet-stream" });
-});
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddTransient<IWordService, WordService>();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
-}
+var wordHub = new HubConnectionBuilder()
+	.WithUrl(app.Services.GetRequiredService<NavigationManager>().ToAbsoluteUri("/wordhub"))
+	.Build();
 
-app.UseHttpsRedirection();
+await wordHub.StartAsync();
 
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapHub<WordHub>("/wordhub");
-app.MapFallbackToPage("/_Host");
-
-app.Run();
+await app.RunAsync();

@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	    <title>BlazorGameWorld</title>
+	    <base href="/" />
+	    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+	    <link href="css/site.css" rel="stylesheet" />
+	    <link rel="icon" type="image/png" href="favicon.png" />
+	    <link href="BlazorGameWorld.styles.css" rel="stylesheet" />
+	</head>
+	<body>
+	    <div id="blazorBody">
+	        <svg class="loading-progress">
+	            <circle r="40%" cx="50%" cy="50%" />
+	            <circle r="40%" cx="50%" cy="50%" />
+	        </svg>
+	        <div class="loading-progress-text"></div>
+	    </div>
+	    <div id="blazor-error-ui">
+	        An unhandled error has occurred.
+	        <a href="" class="reload">Reload</a>
+	        <a class="dismiss">🗙</a>
+	    </div>
+		<script src="_framework/blazor.webassembly.js"></script>
+		<script>
+		    window.applyStyleForElement = function (styleOp, styleOp2) {
+		        document.getElementById(styleOp.id).style[styleOp.attrib] = styleOp.value;
+		        if (styleOp2 != null) {
+		            document.getElementById(styleOp2.id).style[styleOp2.attrib] = styleOp2.value;
+		        }
+		    }
+
+		    window.getStyleForElement = function (styleOp) {
+		        return document.getElementById(styleOp.id).style[styleOp.attrib] == "inline" ? true : false;
+		    }
+
+		    var FocusScript = FocusScript || {};
+		    FocusScript.setFocus = function (element) {
+		        element.focus();
+		    };
+		</script>
+	</body>
+</html>
