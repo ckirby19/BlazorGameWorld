@@ -113,9 +113,8 @@ namespace BlazorSignalRApp.Server.Hubs
             if (clientList.Count > 0)
             {
                 string connectionId = Context.ConnectionId;
-                Console.WriteLine("Client If Disconnected:" + connectionId);
                 string userName = clientList.FirstOrDefault(entry => entry.Value == connectionId).Key;
-                Console.WriteLine("Client If Disconnected UserName:" + userName);
+                Console.WriteLine("Client Is Disconnected UserName:" + userName);
                 if (userName != null)
                 {
                     clientList.TryRemove(userName, out _);

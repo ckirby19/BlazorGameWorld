@@ -1,7 +1,78 @@
 ﻿@page "/connectfour"
+@using Microsoft.AspNetCore.SignalR.Client
 @inject BlazorGameWorld.Shared.ConnectFourGameState State
 @using System.Drawing
+@inject NavigationManager NavigationManager
+@implements IDisposable
+@inject IJSRuntime JSRuntime
+
+<HeadContent>
+	<style>
+		:root {
+			--board-bg: @ColorTranslator.ToHtml(BoardColor);
+			--player1: @ColorTranslator.ToHtml(Player1Color);
+			--player2: @ColorTranslator.ToHtml(Player2Color);
+		}
+	</style>
+</HeadContent>
+
+@if (!isFullRoom)
+{
+	<div class="form-group">
+		@if(!isLogin) {
+			<label>
+				Username: <input @bind="userName" @ref=ReferenceToLoginControl/>
+			</label>
+			<button @onclick="Send" disabled="@(!IsConnected)">Login</button>
+		}
+		else{
+			<label>
+				<h2><b>Username:</b> @userName</h2>
+			</label>  
+			<label><h2><b>Waiting for other user...</b></h2></label> 
+		}
+	</div>
+}
+
+
+<article>
+	@WinnerMessage  <button style="@ResetStyle" @onclick="ResetGame">Reset the game</button>
+	<br />
+	<span class="alert-danger">@ErrorMessage</span>
+	<span class="alert-info">@CurrentTurn</span>
+</article>
+
+<nav>
+	<!--
+	We can't use a for loop for this, as we are defining an onclick handler for these span elements that has an assigned column number.
+	at character in front of onclick means C# will handle the click events, and we can use custom method
+	-->
+	<span title="Click to play a piece" @onclick="() => PlayPiece(1)">🔽</span>
+	<span title="Click to play a piece" @onclick="() => PlayPiece(2)">🔽</span>
+	<span title="Click to play a piece" @onclick="() => PlayPiece(3)">🔽</span>
+	<span title="Click to play a piece" @onclick="() => PlayPiece(4)">🔽</span>
+	<span title="Click to play a piece" @onclick="() => PlayPiece(5)">🔽</span>
+	<span title="Click to play a piece" @onclick="() => PlayPiece(6)">🔽</span>
+	<span title="Click to play a piece" @onclick="() => PlayPiece(7)">🔽</span>
+</nav>
+
+<div>
+	<div class="board">
+		@for (var i = 0; i < numContainers; i++)
+		{
+			<span class="container">
+				<span></span>
+			</span>
+		}
+	</div>
+	@for (var i = 0; i < 42; i++)
+	{
+		<span class="@Pieces[i]"></span>
+	}
+</div>
+
 @code {
+	// Need to transform all of this to use a hub and do hubconnection.on
 	int numContainers = 42;
 	private string[] Pieces = new string[42];
 
@@ -54,57 +125,3 @@
 
 	private string ResetStyle => (WinnerMessage == string.Empty) ? "display: none;" : "";
 }
-
-<HeadContent>
-	<style>
-		:root {
-			--board-bg: @ColorTranslator.ToHtml(BoardColor);
-			--player1: @ColorTranslator.ToHtml(Player1Color);
-			--player2: @ColorTranslator.ToHtml(Player2Color);
-		}
-	</style>
-</HeadContent>
-
-<article>
-	@WinnerMessage  <button style="@ResetStyle" @onclick="ResetGame">Reset the game</button>
-	<br />
-	<span class="alert-danger">@ErrorMessage</span>
-	<span class="alert-info">@CurrentTurn</span>
-</article>
-
-<nav>
-	<!--
-		We can't use a for loop for this, as we are defining an onclick handler for these span elements that has an assigned column number.
-		at character in front of onclick means C# will handle the click events, and we can use custom method
-	-->
-	<span title="Click to play a piece" @onclick="() => PlayPiece(1)">🔽</span>
-	<span title="Click to play a piece" @onclick="() => PlayPiece(2)">🔽</span>
-	<span title="Click to play a piece" @onclick="() => PlayPiece(3)">🔽</span>
-	<span title="Click to play a piece" @onclick="() => PlayPiece(4)">🔽</span>
-	<span title="Click to play a piece" @onclick="() => PlayPiece(5)">🔽</span>
-	<span title="Click to play a piece" @onclick="() => PlayPiece(6)">🔽</span>
-	<span title="Click to play a piece" @onclick="() => PlayPiece(7)">🔽</span>
-</nav>
-
-<div>
-	<div class="board">
-		@for (var i = 0; i < numContainers; i++)
-		{
-			<span class="container">
-				<span></span>
-			</span>
-		}
-	</div>
-	@for (var i = 0; i < 42; i++)
-	{
-		<span class="@Pieces[i]"></span>
-	}
-</div>
-
-<div>
-	<div class="connect">
-		<span>
-			Connect to game
-		</span>
-	</div>
-</div>
