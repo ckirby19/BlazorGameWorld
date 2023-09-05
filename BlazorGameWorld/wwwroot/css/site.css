@@ -132,13 +132,13 @@ app {
     }
 
 .jumbotron {
-    background-image: url("../Images/panel2.jpg");
+/*    background-image: url("../Images/panel2.jpg");*/
     background-size: cover;
     height: 180px;
 }
 
 body {
-    background-image: url('../Images/wall4.png');
+/*    background-image: url('../Images/wall4.png');*/
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

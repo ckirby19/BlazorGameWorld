@@ -1,4 +1,5 @@
 using BlazorGameWorld.Data;
+using BlazorGameWorld.Hubs;
 using BlazorGameWorld.Pages;
 using BlazorSignalRApp.Server.Hubs;
 using blazorWords.Data;
@@ -39,6 +40,7 @@ app.UseRouting();
 
 app.MapBlazorHub();
 app.MapHub<WordHub>("/wordhub");
+app.MapHub<ConnectFourHub>("/connectfourhub");
 app.MapFallbackToPage("/_Host");
 
 app.Run();

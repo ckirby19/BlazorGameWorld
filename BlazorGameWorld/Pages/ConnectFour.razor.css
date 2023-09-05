@@ -248,3 +248,7 @@ span.container {
         transform: translateY(20.4em)
     }
 }
+
+.waiting {
+    display: block;
+}
