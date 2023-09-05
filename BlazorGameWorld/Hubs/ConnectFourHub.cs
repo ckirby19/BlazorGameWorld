@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorGameWorld.Pages;
+using BlazorGameWorld.Shared;
 using blazorWords.Data;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver.Core.Connections;
@@ -24,6 +26,10 @@ namespace BlazorGameWorld.Hubs
 	public class ConnectFourHub : Hub<IGameClient>
 	{
 		private static ConcurrentBag<Client> _clientList = new ConcurrentBag<Client>();
+		private static ConcurrentBag<ConnectFourGameState> _games = new ConcurrentBag<ConnectFourGameState>();
+
+		//private static ConcurrentDictionary<Tuple<int, int>, ConnectFourGameState> _states = 
+		//	new ConcurrentDictionary<Tuple<int, int>, ConnectFourGameState>();
 
 		public async Task RegisterClient(string userName)
 		{
@@ -64,7 +70,39 @@ namespace BlazorGameWorld.Hubs
 				// Notify both players that a game was found
 				await Clients.Client(Context.ConnectionId).FoundOpponent(opponent.Name, 1);
 				await Clients.Client(opponent.ConnectionId).FoundOpponent(player.Name, 2);
+
+				await Clients.Client(Context.ConnectionId).UserTurn();
+				await Clients.Client(opponent.ConnectionId).OpponentTurn();
+
+				_games.Add(new ConnectFourGameState {Player1 = player, Player2 = opponent});
+
 			}
+		}
+
+		public async Task UserMadeMove(byte col)
+		{
+			var game = _games.FirstOrDefault(x =>
+				x.Player1.ConnectionId == Context.ConnectionId ||
+				x.Player2.ConnectionId == Context.ConnectionId);
+			if (game == null) return;
+
+			var landingRow = game.PlayPiece(col);
+			var cssClass = $"player{game.PlayerTurn} col{col} drop{landingRow}";
+			await Clients.Client(game.Player1.ConnectionId).UpdateGame(game.CurrentTurn - 1,cssClass);
+			await Clients.Client(game.Player2.ConnectionId).UpdateGame(game.CurrentTurn - 1, cssClass);
+			
+			// Need to update turn now, but how to check who made the move?
+			if (game.PlayerTurn == 1)
+			{
+				await Clients.Client(game.Player1.ConnectionId).UserTurn();
+				await Clients.Client(game.Player2.ConnectionId).OpponentTurn();
+			}
+			else if (game.PlayerTurn == 2)
+			{
+				await Clients.Client(game.Player1.ConnectionId).OpponentTurn();
+				await Clients.Client(game.Player2.ConnectionId).UserTurn();
+			}
+
 		}
 
 		//public override async Task OnConnectedAsync()
